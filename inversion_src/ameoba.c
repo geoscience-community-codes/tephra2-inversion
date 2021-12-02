@@ -165,27 +165,28 @@ void optimize_params(double op[][NUM_OF_PARAMS], double mfv[], double tol,
        then try an extrapolation by a factor of 2.
     */
     if (try <= mfv[best]) {
-      fprintf(stderr, "%d[%d]FIT=%.2f  ", *num_evals, best, try);
+      /* fprintf(stderr, "%d[%d]FIT=%.2f  ", *num_evals, best, try); */
+      fprintf(stderr, "%d[%.4f]  ", *num_evals, try);
       try = evaluate(op, mfv, psum, funk, worst, 2.0);
     
     /* If <try> is worse than the 'better' ,
        look for an intermediate 'better' . */
     } else if (try >= mfv[better]) {
       save = mfv[worst];
+      fprintf(stderr, "^");
       try = evaluate(op, mfv, psum, funk, worst, 0.5);
       
       /* If <try> is still worse than the worst,
 	 contract around the best vertex. */
       if (try >= save) {
-	
+	fprintf(stderr, "<>");
 	for (vert = 0; vert < NUM_OF_VERTICES; vert++) {
 	  if (vert != best) {
 	    for (param = 0; param < NUM_OF_PARAMS; param++)
 	      op[vert][param] = psum[param] = 0.5 *(op[vert][param] + op[best][param]);
 	    mfv[vert] = (*funk)(psum);
 	  }
-	  else
-	    fprintf(stderr, "%d-CTV[%d] ", *num_evals, vert);
+	 /* else fprintf(stderr, "%d-CTV[%d] ", *num_evals, vert); */
 	}
 	*num_evals += NUM_OF_PARAMS;
 	
